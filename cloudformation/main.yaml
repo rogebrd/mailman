@@ -1,0 +1,124 @@
+Resources:
+  MailmanRegisterLambda:
+    Type: AWS::Lambda::Function
+    Properties: 
+      Handler: 'lambda.register'
+      Code:
+        S3Bucket: mailman-deployment-bucket
+        S3Key: build/lambda.zip
+      Runtime: python3.7
+      Description: Main Register Lambda
+      Timeout: 30
+      MemorySize: 128
+      Role: !GetAtt
+          - MailmanRegisterLambdaInvocationRole
+          - Arn
+
+  # IAM permissions for lambda
+  MailmanRegisterLambdaInvocationRole:
+      Type: AWS::IAM::Role
+      Properties:
+        Description: Role for lambda for Mailman Register
+        AssumeRolePolicyDocument:
+          Statement:
+            - Action: ['sts:AssumeRole']
+              Effect: Allow
+              Principal:
+                Service: [lambda.amazonaws.com]
+          Version: '2012-10-17'
+        ManagedPolicyArns:
+          - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+  
+  # Api Gateway for publishing data
+  ApiGateway:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: Mailman
+      Description: Mailman Gateway
+  
+  ApiResource:
+    Type: 'AWS::ApiGateway::Resource'
+    Properties:
+      RestApiId: !Ref ApiGateway
+      ParentId: !GetAtt 
+        - ApiGateway
+        - RootResourceId
+      PathPart: 'api'
+
+  # Get API for main page
+  MailmanRegisterMethod:
+    Type: AWS::ApiGateway::Method
+    Properties: 
+      HttpMethod: POST
+      AuthorizationType: NONE
+      ResourceId: !Ref ApiResource
+      RestApiId: !Ref ApiGateway
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri: !Sub
+          - 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${lambdaArn}/invocations'
+          - lambdaArn: !GetAtt
+            - MailmanRegisterLambda
+            - Arn
+
+  OptionsMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: OPTIONS
+      AuthorizationType: NONE
+      ResourceId: !GetAtt
+        - ApiGateway
+        - RootResourceId
+      RestApiId: !Ref ApiGateway
+      Integration:
+        IntegrationResponses:
+          - StatusCode: 200
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            ResponseTemplates:
+              application/json: ''
+        PassthroughBehavior: WHEN_NO_MATCH
+        RequestTemplates:
+          application/json: "{'statusCode': 200}"
+        Type: MOCK
+      MethodResponses:
+        - StatusCode: 200
+          ResponseModels:
+            application/json: 'Empty'
+          ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: false
+              method.response.header.Access-Control-Allow-Methods: false
+              method.response.header.Access-Control-Allow-Origin: false
+  
+  # Lambda hookup for API Gateway
+  MailmanRegisterLambdaApiGatewayInvoke:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt
+        - MailmanRegisterLambda
+        - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/*/POST/api'
+
+  # API Gateway Deployment 
+  # last to avoid no method errors
+  ApiGatewayDeployment:
+    Type: AWS::ApiGateway::Deployment
+    DependsOn:
+      - "OptionsMethod"
+    Properties:
+      RestApiId: !Ref ApiGateway
+      StageName: prod
+
+# Stack Outputs
+Outputs:
+  ApiGatewayInvokeURL:
+      Value: !Sub 'https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/'
+      Description: URL to Invoke Api Gateway
+  StackArn:
+    Value: !Ref AWS::StackId
+    Description: Stack Id
