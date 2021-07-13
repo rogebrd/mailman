@@ -1,4 +1,4 @@
-def register(event, context):
+def lambda_handler(event, context):
     response = {
             'statusCode': 200,
             'headers': {
