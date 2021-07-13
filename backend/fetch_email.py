@@ -44,6 +44,10 @@ class EmailFetcher:
         sender, encoding = decode_header(msg.get("From"))[0]
         if isinstance(sender, bytes):
           sender = sender.decode(encoding)
+
+        result_text.append(f"Subject: {subject}\n")
+        result_text.append(f"Sender: {sender}\n")
+        result_text.append(f"Date: {date}\n")
         
         if msg.is_multipart():
           self.handle_multipart_message(msg, result_text)
@@ -52,7 +56,8 @@ class EmailFetcher:
 
     self.fetched_dict["date"] = date
     self.fetched_dict["sender"] = sender
-    self.fetched_dict["plain"] = result_text
+    self.fetched_dict["plain"] = ''.join(result_text)
+    self.fetched_dict["subject"] = subject
 
     return self.fetched_dict
 
