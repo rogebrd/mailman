@@ -1,17 +1,13 @@
+from email.header import decode_header
+import config
 import email
 import imaplib
-import os
-from email.header import decode_header
 
-
-
-import config
 
 IMAP_GMAIL_SERVER = "imap.gmail.com"
 
 
 class EmailFetcher:
-
   def clean_foldername(self, text):
     """Cleans text for creating a folder."""
     return "".join(c if c.isalnum() else "_" for c in text)
@@ -27,7 +23,7 @@ class EmailFetcher:
     for i in range(message_count, 0, -1):
       results.append(self.fetch_email(imap, i))
     return results
-    
+
   def fetch_email(self, imap, index):
     """Fetches a single email given imap and index of email"""
     messages = imap.fetch(str(index), "(RFC822)")[1]
@@ -61,9 +57,6 @@ class EmailFetcher:
 
     return self.fetched_dict
 
-    
-
-
   def handle_multipart_message(self, message, result_text):
     """Handles a message that is multipart"""
     attachments = []
@@ -84,8 +77,6 @@ class EmailFetcher:
         # download attachment
         attachments.append(payload)
     self.fetched_dict["attachment"] = attachments
-
-
   
   def handle_singlepart_message(self, message, result_text):
     """Handles a message that is not multipart"""
@@ -96,9 +87,3 @@ class EmailFetcher:
       result_text.append(body)
     elif content_type == "text/html":
       self.fetched_dict["html"] = body
-
-if __name__ == "__main__":
-  fetcher = EmailFetcher()
-  fetcher.fetch_account_emails(config.username, config.password)
-
-    
