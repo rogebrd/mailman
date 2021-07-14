@@ -1,5 +1,5 @@
 Resources:
-  # Database2
+  # Databases
   RegistrationsTable:
     Type: AWS::DynamoDB::Table
     Properties:
