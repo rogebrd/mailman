@@ -1,11 +1,10 @@
 import './App.css';
+import { Mailman } from './mailman';
 
 function App() {
     return ( 
         <div className = "App">
-            <header className = "App-header">
-                Mailman
-            </header>
+            <Mailman />
         </div>
     );
 }
