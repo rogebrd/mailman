@@ -1,11 +1,43 @@
 Resources:
-  MailmanRegisterLambda:
+  # Databases
+  RegistrationsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: 'Registrations'
+      BillingMode: 'PROVISIONED'
+      KeySchema:
+        - KeyType: 'HASH'
+          AttributeName: 'email'
+      AttributeDefinitions:
+        - AttributeName: 'email'
+          AttributeType: 'S'
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
+  # Lambdas
+  MailmanLambda:
     Type: AWS::Lambda::Function
-    Properties: 
-      Handler: 'lambda.register'
+    Properties:
+      Handler: 'mailman_lambda.lambda_handler'
       Code:
         S3Bucket: mailman-deployment-bucket
-        S3Key: build/lambda.zip
+        S3Key: build/mailman.zip
+      Runtime: python3.7
+      Description: Main Mailman Lambda
+      Timeout: 30
+      MemorySize: 128
+      Role: !GetAtt
+          - MailmanLambdaInvocationRole
+          - Arn
+
+  MailmanRegisterLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: 'register_lambda.lambda_handler'
+      Code:
+        S3Bucket: mailman-deployment-bucket
+        S3Key: build/register.zip
       Runtime: python3.7
       Description: Main Register Lambda
       Timeout: 30
@@ -14,11 +46,11 @@ Resources:
           - MailmanRegisterLambdaInvocationRole
           - Arn
 
-  # IAM permissions for lambda
-  MailmanRegisterLambdaInvocationRole:
+  # IAM permissions for lambdas
+  MailmanLambdaInvocationRole:
       Type: AWS::IAM::Role
       Properties:
-        Description: Role for lambda for Mailman Register
+        Description: Role for Mailman lambda
         AssumeRolePolicyDocument:
           Statement:
             - Action: ['sts:AssumeRole']
@@ -28,7 +60,53 @@ Resources:
           Version: '2012-10-17'
         ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-  
+
+  MailmanLambdaPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref MailmanLambda
+      Action: 'lambda:InvokeFunction'
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt
+        - ScheduledMailmanRule
+        - Arn
+
+  MailmanRegisterLambdaInvocationRole:
+      Type: AWS::IAM::Role
+      Properties:
+        Description: Role for Mailman Register lambda
+        AssumeRolePolicyDocument:
+          Statement:
+            - Action: ['sts:AssumeRole']
+              Effect: Allow
+              Principal:
+                Service: [lambda.amazonaws.com]
+          Version: '2012-10-17'
+        ManagedPolicyArns:
+          - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        Policies:
+          - PolicyName: RegistrationsTablePolicy
+            PolicyDocument:
+              Statement:
+                - Sid: 'RegistrationsTablePolicyStatement'
+                  Effect: 'Allow'
+                  Action: ['dynamodb:PutItem']
+                  Resource: 'arn:aws:dynamodb:*:*:table/Registrations'
+              Version: '2012-10-17'
+
+  # Rule for cron job
+  ScheduledMailmanRule:
+    Type: AWS::Events::Rule
+    Properties:
+      ScheduleExpression: 'rate(5 minutes)'
+      State: 'ENABLED'
+      Targets:
+        -
+          Arn: !GetAtt
+            - MailmanLambda
+            - Arn
+          Id: MailmanScheduler
+
   # Api Gateway for publishing data
   ApiGateway:
     Type: AWS::ApiGateway::RestApi
