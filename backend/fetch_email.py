@@ -87,3 +87,7 @@ class EmailFetcher:
       result_text.append(body)
     elif content_type == "text/html":
       self.fetched_dict["html"] = body
+
+if __name__ == "__main__":
+  fetcher = EmailFetcher()
+  fetcher.fetch_account_emails(config.username, config.password)
