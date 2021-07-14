@@ -16,7 +16,7 @@ class EmailFetcher:
     """Fetches all emails given username and password of account"""
     # create imap subclass that connects over SSL encrypted pocket
     imap = imaplib.IMAP4_SSL(IMAP_GMAIL_SERVER)
-    imap.login(config.username, config.password)
+    imap.login(username, password)
     status, messages = imap.select()
     message_count = int(messages[0])
     results = []
