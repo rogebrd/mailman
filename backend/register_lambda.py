@@ -20,7 +20,7 @@ def lambda_handler(event, context):
             'headers': {
                 'Access-Control-Allow-Origin': '*'
             },
-            'body': 'Email {} registered!'.format(email)
+            'body': 'Email {} registered!'.format(email),
         }
 
     print('Response: %s' % (response))
