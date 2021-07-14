@@ -5,13 +5,13 @@ dynamodb = boto3.client('dynamodb')
 def lambda_handler(event, context):
     params = event['queryStringParameters']
     email = params['email']
-    password = params['password']
+    dropbox_oauth_token = params['dropbox_oauth_token']
 
     dynamodb.put_item(
         TableName='Emails',
         Item={
             'email': {'S': email},
-            'password': {'S': password},
+            'dropbox_oauth_token': {'S': dropbox_oauth_token},
         }
     )
 

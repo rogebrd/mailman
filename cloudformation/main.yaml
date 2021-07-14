@@ -1,9 +1,9 @@
 Resources:
   # Database2
-  EmailTable:
+  RegistrationsTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: 'Emails'
+      TableName: 'Registrations'
       BillingMode: 'PROVISIONED'
       KeySchema:
         - KeyType: 'HASH'
@@ -85,21 +85,20 @@ Resources:
         ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
         Policies:
-          - PolicyName: EmailTablePolicy
+          - PolicyName: RegistrationsTablePolicy
             PolicyDocument:
               Statement:
-                - Sid: 'EmailTable'
+                - Sid: 'RegistrationsTablePolicyStatement'
                   Effect: 'Allow'
                   Action: ['dynamodb:PutItem']
-                  Resource: 'arn:aws:dynamodb:*:*:table/Emails'
+                  Resource: 'arn:aws:dynamodb:*:*:table/Registrations'
               Version: '2012-10-17'
-
 
   # Rule for cron job
   ScheduledMailmanRule:
     Type: AWS::Events::Rule
     Properties:
-      ScheduleExpression: 'rate(1 minute)'
+      ScheduleExpression: 'rate(5 minute)'
       State: 'ENABLED'
       Targets:
         -

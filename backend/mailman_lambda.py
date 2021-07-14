@@ -2,17 +2,16 @@ from datetime import datetime
 from fetch_email import EmailFetcher
 import os
 
-
-USERNAME = os.environ['username']  # Username for email account
+EMAIL = 'dropbox.mailman@gmail.com'
 PASSWORD = os.environ['password']  # Password for email account
 
 
 def lambda_handler(event, context):
-    print('Fetching emails for {} at {}...'.format(USERNAME, event['time']))
+    print('Fetching emails for {} at {}...'.format(EMAIL, event['time']))
     num_emails = 0
     try:
       fetcher = EmailFetcher()
-      num_emails = len(fetcher.fetch_account_emails(USERNAME, PASSWORD))
+      num_emails = len(fetcher.fetch_account_emails(EMAIL, PASSWORD))
     except:
         print('Fetch failed!')
         raise
