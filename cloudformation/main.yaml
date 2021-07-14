@@ -1,4 +1,21 @@
 Resources:
+  # Database2
+  EmailTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: 'Emails'
+      BillingMode: 'PROVISIONED'
+      KeySchema:
+        - KeyType: 'HASH'
+          AttributeName: 'email'
+      AttributeDefinitions:
+        - AttributeName: 'email'
+          AttributeType: 'S'
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
+  # Lambdas
   MailmanLambda:
     Type: AWS::Lambda::Function
     Properties:
@@ -16,7 +33,7 @@ Resources:
 
   MailmanRegisterLambda:
     Type: AWS::Lambda::Function
-    Properties: 
+    Properties:
       Handler: 'register_lambda.lambda_handler'
       Code:
         S3Bucket: mailman-deployment-bucket
@@ -67,6 +84,16 @@ Resources:
           Version: '2012-10-17'
         ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        Policies:
+          - PolicyName: EmailTablePolicy
+            PolicyDocument:
+              Statement:
+                - Sid: 'EmailTable'
+                  Effect: 'Allow'
+                  Action: ['dynamodb:PutItem']
+                  Resource: 'arn:aws:dynamodb:*:*:table/Emails'
+              Version: '2012-10-17'
+
 
   # Rule for cron job
   ScheduledMailmanRule:
