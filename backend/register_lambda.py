@@ -8,7 +8,7 @@ def lambda_handler(event, context):
     dropbox_oauth_token = params['dropbox_oauth_token']
 
     dynamodb.put_item(
-        TableName='Emails',
+        TableName='Registrations',
         Item={
             'email': {'S': email},
             'dropbox_oauth_token': {'S': dropbox_oauth_token},
