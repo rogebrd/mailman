@@ -1,13 +1,10 @@
 from dropbox import Dropbox, files
 import string
 
-MAILMAN_CLIENT_ID = '2j1mfqvrkfz4n65'  # not the best way to store this but for testing/simplicity for now
-
 class MailmanClient():
-    def __init__(self, client_id):
+    def __init__(self):
         self.dbx = Dropbox(
-            oauth2_access_token="temp_token",
-            app_key=client_id
+            oauth2_access_token="temp_token"
         )
 
     def upload_file_to_dropbox(self, email_contents, path, desired_file_name, access_token):
