@@ -26,4 +26,4 @@ jobs:
         with:
           ACCESS_TOKEN: ${{ secrets.GH_PAGES_PUBLISH_TOKEN }}
           BRANCH: gh-pages # The branch the action should deploy to.
-          FOLDER: build # The folder the action should deploy.
+          FOLDER: frontend/build # The folder the action should deploy.
