@@ -1,4 +1,5 @@
 from imap_tools import MailBox, AND
+
 import config
 
 IMAP_GMAIL_SERVER = "imap.gmail.com"
