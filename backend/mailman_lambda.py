@@ -29,7 +29,7 @@ def lambda_handler(event, context):
             item = response['Item']
             oauth_token = item['dropbox_oauth_token']['S']
             formatted_email = FormattedEmail(email)
-            path = '/Mailman/%s' % formatted_email.foldername
+            path = formatted_email.pathname
             dropbox_client.upload_email(formatted_email, path, oauth_token)
             print('Email from {} successfully uploaded to Dropbox!'.format(sender))
     except:
