@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
+.App {
+  font-family: 'Poppins', sans-serif;
+}
+
 .home {
   display: flex;
   width: 100%;
@@ -59,11 +65,15 @@
 .title {
   color: #1E1919;
   width: 626px;
-  font-size: 59px;
-  line-height: 64.9px;
+  font-size: 72px;
+  line-height: 79px;
   letter-spacing: -0.01em;
   padding: 0;
   margin: 0;
+  font-style: normal;
+  font-weight: 300;
+  text-align: left;
+
 }
 
 .single-title.page-subtitle {
