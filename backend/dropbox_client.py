@@ -1,7 +1,6 @@
 from dropbox import Dropbox, files
-import string
 
-class MailmanClient():
+class MailmanDropboxClient():
     def __init__(self):
         self.dbx = Dropbox(
             oauth2_access_token="temp_token"
@@ -17,7 +16,7 @@ class MailmanClient():
             path, 
             mode=files.WriteMode.overwrite,  # when saving over a previous email/thread, overrides the file
             strict_conflict=False
-            )
+        )
         
 
     def convert_email_content_to_bytes(self, email_contents):
