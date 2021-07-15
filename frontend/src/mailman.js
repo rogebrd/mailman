@@ -71,7 +71,7 @@ export const Mailman = () => {
                 const fetchOptions = {
                     method: 'POST'
                 }
-                const baseApiUrl = "https://aqb29pjpgl.execute-api.us-west-2.amazonaws.com";
+                const baseApiUrl = "https://duv3a4ynni.execute-api.us-west-2.amazonaws.com";
                 const registrationUrl = `${baseApiUrl}/prod/api?email=${email}&dropbox_oauth_token=${result.access_token}`;
                 fetch(registrationUrl, fetchOptions)
                     .then((res) => {
