@@ -2,7 +2,6 @@ FROM_KEYWORD = "From"
 DATE_KEYWORD = "Date"
 
 class FormattedEmail:
-
   def __init__(self, msg):
     self.msg = msg
     self.formatted_text = ""
@@ -10,11 +9,10 @@ class FormattedEmail:
     self.format()
 
   def format(self):
-    lines = self.msg.text.splitlines()    
+    lines = self.msg.text.splitlines()
     self.format_text(lines)
     self.format_subject()
     self.set_foldername(lines)
-
 
   def format_text(self, lines):
     if not lines:
@@ -23,10 +21,10 @@ class FormattedEmail:
     cut_index = keyword_line_indices[0] if keyword_line_indices else 0
     formatted_text = "\n".join(lines[cut_index:])
     self.formatted_text = formatted_text
-  
+
   def set_foldername(self, lines):
     if not lines:
-      return
+      return self.formatted_subject
     keyword_line_indices = [i for i in range(len(lines)) if DATE_KEYWORD in lines[i]]
     date_string = ""
     if keyword_line_indices:
@@ -34,7 +32,6 @@ class FormattedEmail:
       date_string = lines[keyword_line_indices[0]][cut_index:]
     self.foldername = self.formatted_subject + "_" + date_string
 
-  
   def format_subject(self):
     if not self.msg.subject:
       return
