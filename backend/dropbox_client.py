@@ -30,11 +30,10 @@ class MailmanDropboxClient():
     def upload_email(self, formatted_email, path, access_token):
         attachments = formatted_email.msg.attachments
         if attachments:
-            attachments_path = "%s/Attachments" % path
             for attachment in attachments:
                 file_name = attachment.filename
                 file_contents = attachment.payload
-                self.upload_file_to_dropbox(file_contents, attachments_path, file_name, access_token)
-        file_name = "%s.txt" % formatted_email.formatted_subject
+                self.upload_file_to_dropbox(file_contents, path, file_name, access_token)
+        file_name = formatted_email.filename
         file_contents = formatted_email.formatted_text
         self.upload_file_to_dropbox(file_contents, path, file_name, access_token)
