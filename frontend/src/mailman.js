@@ -23,7 +23,7 @@ export const Mailman = () => {
             clientId: 'a04f1ghft6a45rn'
         });
         setDropboxAuth(auth);
-        auth.getAuthenticationUrl('http://localhost:3000/mailman', '', 'code', 'legacy', null, 'none', true).then((authUrl) => {
+        auth.getAuthenticationUrl('https://rogebrd.github.io/mailman/', '', 'code', 'legacy', null, 'none', true).then((authUrl) => {
             const windowOptions = {
                 toolbar: 'no',
                 menubar: 'no',
@@ -66,11 +66,21 @@ export const Mailman = () => {
         }
         const contents = event.data;
         if(contents.sender && contents.sender === 'Dropbox Authentication Popup'){
-            dropboxAuth.getAccessTokenFromCode('http://localhost:3000/mailman', contents.code).then((response) => {
+            dropboxAuth.getAccessTokenFromCode('https://rogebrd.github.io/mailman/', contents.code).then((response) => {
                 const { result } = response;
-                console.log(`Registration Contents: \n email: ${email} \n token: ${result.access_token}`);
-                // this is where the api call is made
-                setRegisterStep("CONFIRMATION");
+                const fetchOptions = {
+                    method: 'POST'
+                }
+                const baseApiUrl = "https://aqb29pjpgl.execute-api.us-west-2.amazonaws.com";
+                const registrationUrl = `${baseApiUrl}/prod/api?email=${email}&dropbox_oauth_token=${result.access_token}`;
+                fetch(registrationUrl, fetchOptions)
+                    .then((res) => {
+                        setRegisterStep("CONFIRMATION");
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    })
+                
             })
             .catch((error) => {
             console.error(error);
