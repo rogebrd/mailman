@@ -20,7 +20,7 @@ export const Mailman = () => {
 
     const onSubmitAuthenticate = () => {
         const auth = new DropboxAuth({
-            clientId: 'a04f1ghft6a45rn'
+            clientId: '69qj4b6vw1zwn45'
         });
         setDropboxAuth(auth);
         auth.getAuthenticationUrl('https://rogebrd.github.io/mailman/', '', 'code', 'legacy', null, 'none', true).then((authUrl) => {

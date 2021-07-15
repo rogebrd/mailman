@@ -36,7 +36,7 @@ class FormattedEmail:
           if "folder" in word.lower() and i != len(words) - 1:
             basename = words[i+1]
             basename = basename[:-1] if basename[-1] == "/" else basename
-            return basename
+            return f'/{basename}'
     return None
 
   def set_pathname(self, lines, basepath="/Mailman"):
@@ -63,7 +63,7 @@ class FormattedEmail:
     if not day[-1].isnumeric():
       day = day[:-1]
     year = words[year_index]
-    filename = f'{month}-{day}-{year}: {self.formatted_subject}'
+    filename = f'{month}-{day}-{year} - {self.formatted_subject}'
     if not self.msg.attachments:
       self.pathname = f'{basepath}/'
     else:
