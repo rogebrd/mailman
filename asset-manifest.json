@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/mailman/static/css/main.a617e044.chunk.css",
-    "main.js": "/mailman/static/js/main.75b6ea6a.chunk.js",
-    "main.js.map": "/mailman/static/js/main.75b6ea6a.chunk.js.map",
+    "main.css": "/mailman/static/css/main.668b69b2.chunk.css",
+    "main.js": "/mailman/static/js/main.43e7a703.chunk.js",
+    "main.js.map": "/mailman/static/js/main.43e7a703.chunk.js.map",
     "runtime-main.js": "/mailman/static/js/runtime-main.2b17752e.js",
     "runtime-main.js.map": "/mailman/static/js/runtime-main.2b17752e.js.map",
-    "static/js/2.a42afbaf.chunk.js": "/mailman/static/js/2.a42afbaf.chunk.js",
-    "static/js/2.a42afbaf.chunk.js.map": "/mailman/static/js/2.a42afbaf.chunk.js.map",
+    "static/js/2.f5d6b5ec.chunk.js": "/mailman/static/js/2.f5d6b5ec.chunk.js",
+    "static/js/2.f5d6b5ec.chunk.js.map": "/mailman/static/js/2.f5d6b5ec.chunk.js.map",
     "static/js/3.d8a83cd4.chunk.js": "/mailman/static/js/3.d8a83cd4.chunk.js",
     "static/js/3.d8a83cd4.chunk.js.map": "/mailman/static/js/3.d8a83cd4.chunk.js.map",
     "index.html": "/mailman/index.html",
-    "static/css/main.a617e044.chunk.css.map": "/mailman/static/css/main.a617e044.chunk.css.map",
-    "static/js/2.a42afbaf.chunk.js.LICENSE.txt": "/mailman/static/js/2.a42afbaf.chunk.js.LICENSE.txt"
+    "static/css/main.668b69b2.chunk.css.map": "/mailman/static/css/main.668b69b2.chunk.css.map",
+    "static/js/2.f5d6b5ec.chunk.js.LICENSE.txt": "/mailman/static/js/2.f5d6b5ec.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.2b17752e.js",
-    "static/js/2.a42afbaf.chunk.js",
-    "static/css/main.a617e044.chunk.css",
-    "static/js/main.75b6ea6a.chunk.js"
+    "static/js/2.f5d6b5ec.chunk.js",
+    "static/css/main.668b69b2.chunk.css",
+    "static/js/main.43e7a703.chunk.js"
   ]
 }
