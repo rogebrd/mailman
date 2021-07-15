@@ -1,6 +1,7 @@
 from datetime import datetime
 from dropbox_client import MailmanDropboxClient
 from fetch_email import EmailFetcher
+from formatted_email import FormattedEmail
 import boto3
 import os
 
@@ -27,7 +28,9 @@ def lambda_handler(event, context):
             )
             item = response['Item']
             oauth_token = item['dropbox_oauth_token']['S']
-            dropbox_client.upload_file_to_dropbox(email.text, '/Mailman', email.subject + '.txt', oauth_token)
+            formatted_email = FormattedEmail(email)
+            path = '/Mailman/%s' % formatted_email.foldername
+            dropbox_client.upload_email(formatted_email, path, oauth_token)
             print('Email from {} successfully uploaded to Dropbox!'.format(sender))
     except:
         print('Request failed!')
