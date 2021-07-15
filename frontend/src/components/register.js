@@ -1,11 +1,11 @@
 import React from "react";
 
 export const Register = () => {
-    const [email, setEmail] = React.useState("");
+    // const [email, setEmail] = React.useState("");
 
-    const registerEmail = () => {
-        //make call to lambda to register new email
-    }
+    // const registerEmail = () => {
+    //     //make call to lambda to register new email
+    // }
 
     return (
         <div className="email-input-wrapper">
