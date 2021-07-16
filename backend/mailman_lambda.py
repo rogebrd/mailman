@@ -26,6 +26,9 @@ def lambda_handler(event, context):
                 TableName='Registrations',
                 Key={'email': {'S': sender}},
             )
+            if not response:
+                print('{} not registered'.format(sender))
+                continue
             item = response['Item']
             oauth_token = item['dropbox_oauth_token']['S']
             formatted_email = FormattedEmail(email)
