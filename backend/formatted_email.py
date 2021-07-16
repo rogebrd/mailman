@@ -29,14 +29,16 @@ class FormattedEmail:
     self.formatted_text = formatted_text
   
   def get_basename(self, lines):
-    for line in lines:
-      if "folder" in line.lower():
-        words = line.split(" ")
-        for i, word in enumerate(words):
-          if "folder" in word.lower() and i != len(words) - 1:
-            basename = words[i+1]
-            basename = basename[:-1] if basename[-1] == "/" else basename
-            return f'/{basename}'
+    if not lines:
+      return None
+    line = lines[0]
+    if "folder" in line.lower():
+      words = line.split(" ")
+      for i, word in enumerate(words):
+        if "folder" in word.lower() and i != len(words) - 1:
+          basename = words[i+1]
+          basename = basename[:-1] if basename[-1] == "/" else basename
+          return f'/{basename}'
     return None
 
   def set_pathname(self, lines, basepath="/Mailman"):
@@ -65,9 +67,9 @@ class FormattedEmail:
     year = words[year_index]
     filename = f'{month}-{day}-{year} - {self.formatted_subject}'
     if not self.msg.attachments:
-      self.pathname = f'{basepath}/'
+      self.pathname = f'{basepath}'
     else:
-      self.pathname = f'{basepath}/{filename}/'
+      self.pathname = f'{basepath}/{filename}'
     self.filename = f'{filename}.txt'
 
   def format_subject(self):

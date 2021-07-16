@@ -11,6 +11,7 @@ class MailmanDropboxClient():
             file_contents = self.convert_file_content_to_bytes(file_contents)
         self.reset_tokens(access_token)
         path = "%s/%s" % (path, file_name)
+        print(path)
         self.dbx.files_upload(
             file_contents,
             path,
