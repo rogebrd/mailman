@@ -1,3 +1,4 @@
+from email_sender import send_confirmation_email
 import boto3
 
 dynamodb = boto3.client('dynamodb')
@@ -14,6 +15,8 @@ def lambda_handler(event, context):
             'dropbox_oauth_token': {'S': dropbox_oauth_token},
         }
     )
+
+    send_confirmation_email(email)
 
     response = {
             'statusCode': 200,

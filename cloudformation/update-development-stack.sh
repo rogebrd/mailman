@@ -1,5 +1,5 @@
 cd backend
-zip --symlinks -r register.zip register_lambda.py
+zip --symlinks -r register.zip register_lambda.py email_sender.py
 aws s3 cp register.zip s3://mailman-deployment-bucket/build/register.zip
 
 pip install --target ./package dropbox imap_tools
